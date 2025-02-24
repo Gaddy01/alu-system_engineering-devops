@@ -2,11 +2,12 @@
 #A Bash script that creates an RSA key pair.
 
 # Define variables
-SAVE_FILE_NAME="$HOME/.ssh/school"
+KEY_NAME="school"
+KEY_PATH="$HOME/.ssh/$KEY_NAME"
 PASSPHRASE="betty"
 
 # Ensure the .ssh directory exists
 mkdir -p "$HOME/.ssh"
 
 # Generate the RSA key pair
-ssh-keygen -b 4096 -f "$SAVE_FILE_NAME" -N "$PASSPHRASE"
+ssh-keygen -t rsa -b 4096 -f "$KEY_PATH" -N "$PASSPHRASE"
