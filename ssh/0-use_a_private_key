@@ -1,0 +1,6 @@
+#!bin/bash
+
+ssh ubuntu@8.8.8.8
+ssh-keygen
+ssh-copy-id ubuntu@8.8.8.8
+ssh ubuntu@8.8.8.8
