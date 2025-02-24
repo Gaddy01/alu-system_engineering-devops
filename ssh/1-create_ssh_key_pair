@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 #A Bash script that creates an RSA key pair.
-SAVE_FILE_NAME = "school"
-PASSPHRASE = "betty"
+SAVE_FILE_NAME="~/.ssh/school"
+PASSPHRASE="betty"
 
-ssh-keygen -b 4096
-echo "$SAVE_FILE_NAME"
-echo "$PASSPHRASE"
-echo "$PASSPHRASE"
+ssh-keygen -b 4096 -f "$SAVE_FILE_NAME" -N "PASSPHRASE"
