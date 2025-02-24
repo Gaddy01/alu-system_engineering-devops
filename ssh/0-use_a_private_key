@@ -4,4 +4,4 @@ REMOTE_USER = "ubuntu"
 REMOTE_HOST = "8.8.8.8"
 SSH_KEY ="~/.ssh/school"
 
-ssh -i "~/.ssh/school" "$REMOTE_USER@$REMOTE_HOST"
+ssh -i ~/.ssh/school "$REMOTE_USER@$REMOTE_HOST"
