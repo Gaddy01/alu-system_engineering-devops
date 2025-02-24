@@ -1,6 +1,12 @@
 #!/usr/bin/env bash
 #A Bash script that creates an RSA key pair.
+
+# Define variables
 SAVE_FILE_NAME="~/.ssh/school"
 PASSPHRASE="betty"
 
+# Ensure the .ssh directory exists
+mkdir -p "~/.ssh"
+
+# Generate the RSA key pair
 ssh-keygen -b 4096 -f "$SAVE_FILE_NAME" -N "PASSPHRASE"
