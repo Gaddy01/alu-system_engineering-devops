@@ -1,4 +1,4 @@
-#!bin/bash
+#!/usr/bin/env bash
 
 ssh ubuntu@8.8.8.8
 ssh-keygen
