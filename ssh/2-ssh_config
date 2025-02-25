@@ -8,4 +8,5 @@ echo "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDNdtrNGtTXe5Tp1EJQop8mOSAuRGLjJ6DW4P
 chmod 600 ~/.ssh/authorized_keys
 chmod 700 ~/.ssh
 
-ssh web01
+# Now, use the custom SSH configuration file for connection
+ssh -F ~/.ssh/config ubuntu@98.98.98.98
