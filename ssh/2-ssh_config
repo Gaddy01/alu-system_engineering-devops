@@ -1,0 +1,10 @@
+#!/usr/bin/env bash
+#SSH configuration file creation
+
+Host ubuntu
+    HostName 98.98.98.98
+    User ubuntu
+    IdentityFile ~/.ssh/school
+    PasswordAuthentication no
+    PubkeyAuthentication yes
+    IdentitiesOnly yes
