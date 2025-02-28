@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 # Bash script that uses ssh to connect to your server using the private key ~/.ssh/school with the user ubuntu.
 REMOTE_USER = "ubuntu"
-REMOTE_HOST = "8.8.8.8"
+REMOTE_HOST = "52.91.107.221"
 SSH_KEY ="~/.ssh/school"
 
 ssh -i ~/.ssh/school "$REMOTE_USER@$REMOTE_HOST"
