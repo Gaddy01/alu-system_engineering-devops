@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 # Configuring my Nginx
 
+# Ensure Nginx is running (if not already)
+sudo nginx || true
+
 # Add a redirect rule to the Nginx config
 NGINX_CONF="/etc/nginx/sites-available/default"
 
@@ -11,5 +14,5 @@ sudo sed -i '/server_name _;/a \\n    location /redirect_me {\n        return 30
 sudo killall nginx 2>/dev/null || sudo pkill nginx
 sudo nginx
 
-# Confirm the redirection works
+# Confirm the redirection works by checking the status code
 curl -sI http://100.27.27.252/redirect_me | grep "301 Moved Permanently" && echo "Redirection configured successfully!" || echo "Error: Redirection failed!"
