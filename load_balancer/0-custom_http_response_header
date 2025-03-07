@@ -1,15 +1,19 @@
 #!/usr/bin/env bash
 # Creation and configuration of the second server
 
+# Exit if any command fails
+set -e
+
 # Update and install Nginx
 sudo apt update
 sudo apt install -y nginx
 
-# Add custom HTTP header in Nginx configuration
-echo "add_header X-Served-By \$hostname;" | sudo tee -a /etc/nginx/nginx.conf > /dev/null
+# Add custom HTTP header in the correct Nginx configuration
+CONFIG_FILE="/etc/nginx/sites-available/default"
 
-# Test Nginx configuration
+# Ensure the directive is inside the 'server' block
+sudo sed -i "/server {/a \\    add_header X-Served-By $(hostname);" "$CONFIG_FILE"
+
+# Test and reload Nginx
 sudo nginx -t
-
-# Restart Nginx to apply changes
 sudo systemctl restart nginx
