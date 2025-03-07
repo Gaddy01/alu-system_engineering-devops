@@ -1,0 +1,15 @@
+#!/usr/bin/env bash
+# Configuring my Nginx
+
+# Add a redirect rule to the Nginx config
+NGINX_CONF="/etc/nginx/sites-available/default"
+
+# Use sed to add a redirect line inside the server block
+sudo sed -i '/server_name _;/a \\n    location /redirect_me {\n        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n    }\n' "$NGINX_CONF"
+
+# Restart Nginx without systemctl
+sudo killall nginx 2>/dev/null || sudo pkill nginx
+sudo nginx
+
+# Confirm the redirection works
+curl -sI http://100.27.27.252/redirect_me | grep "301 Moved Permanently" && echo "Redirection configured successfully!" || echo "Error: Redirection failed!"
