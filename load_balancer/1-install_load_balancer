@@ -1,9 +1,6 @@
 #!/usr/bin/env bash
 #Install and configure HAproxy on my lb-01 server.
 
-#!/usr/bin/env bash
-# Script to install and configure HAProxy on lb-01
-
 # Exit if any command fails
 set -e
 
