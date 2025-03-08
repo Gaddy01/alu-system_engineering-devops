@@ -1,18 +1,21 @@
 #!/usr/bin/env bash
-# Configuring my Nginx
+# Configures a custom 404 page with the string 'Ceci n'est pas une page'
 
-# Ensure Nginx is running (if not already)
-sudo nginx || true
+sudo apt-get update
+sudo apt-get install -y nginx
 
-# Add a redirect rule to the Nginx config
-NGINX_CONF="/etc/nginx/sites-available/default"
+echo "Holberton School" | sudo tee /var/www/html/index.html
 
-# Use sed to add a redirect line inside the server block
-sudo sed -i '/server_name _;/a \\n    location /redirect_me {\n        return 301 https://www.youtube.com/watch?v=QH2-TGUlwu4;\n    }\n' "$NGINX_CONF"
+# redirection config
+config_str="server_name _;\\
+    rewrite ^/redirect_me https://github.com permanent;"
+sudo sed -i "s|server_name _;|$config_str|" /etc/nginx/sites-available/default
 
-# Restart Nginx without systemctl
-sudo killall nginx 2>/dev/null || sudo pkill nginx
-sudo nginx
+# creating 404 error page
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
+page="listen 80 default_server;\\n\\terror_page 404 /404.html;\\n\\tlocation = /404.html {\\n\\t\\troot /var/www/html;\\n\\t\\tinternal;\\n\\t}"
+sudo sed -i "s|listen 80 default_server;|$page|" /etc/nginx/sites-available/default
 
-# Confirm the redirection works by checking the status code
-curl -sI http://100.27.27.252/redirect_me | grep "301 Moved Permanently" && echo "Redirection configured successfully!" || echo "Error: Redirection failed!"
+# config testing and restarting
+sudo nginx -t
+sudo service nginx restart
