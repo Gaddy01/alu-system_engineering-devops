@@ -1,25 +1,18 @@
 #!/usr/bin/env bash
 # nginx configuration for 404 not found page
 
-# Create index page
-echo "Holberton School" | sudo tee /var/www/html/index.html > /dev/null
+echo "Holberton School" | sudo tee /var/www/html/index.html
 
-# Create custom 404 page
-ERROR_PAGE_PATH="/var/www/html/404.html"
-echo "Ceci n'est pas une page" | sudo tee "$ERROR_PAGE_PATH" > /dev/null
+# redirection config
+config_str="server_name _;\\
+    rewrite ^/redirect_me https://github.com permanent;"
+sudo sed -i "s|server_name _;|$config_str|" /etc/nginx/sites-available/default
 
-# Update Nginx config
-NGINX_CONF="/etc/nginx/sites-available/default"
+# creating 404 error page
+echo "Ceci n'est pas une page" | sudo tee /var/www/html/404.html
+page="listen 80 default_server;\\n\\terror_page 404 /404.html;\\n\\tlocation = /404.html {\\n\\t\\troot /var/www/html;\\n\\t\\tinternal;\\n\\t}"
+sudo sed -i "s|listen 80 default_server;|$page|" /etc/nginx/sites-available/default
 
-# Ensure correct configuration: add redirect and custom 404 handling
-sudo sed -i '/server_name _;/a \ \n    rewrite ^/redirect_me https://github.com permanent;\n    error_page 404 /404.html;\n    location = /404.html {\n        root /var/www/html;\n    }' "$NGINX_CONF"
-
-# Test and restart Nginx properly
-sudo nginx -t && sudo service nginx restart
-
-# Verify 404 page setup
-if curl -s http://localhost/nonexistent | grep "Ceci n'est pas une page"; then
-    echo "Custom 404 page configured successfully!"
-else
-    echo "Error: Custom 404 page is not working!"
-fi
+# config testing and restarting
+sudo nginx -t
+sudo service nginx restart
