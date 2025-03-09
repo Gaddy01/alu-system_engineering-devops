@@ -12,7 +12,7 @@ echo "Ceci n'est pas une page" | sudo tee "$ERROR_PAGE_PATH" > /dev/null
 NGINX_CONF="/etc/nginx/sites-available/default"
 
 # Ensure correct configuration: add redirect and custom 404 handling
-sudo sed -i '/server_name _;/a \ \n    rewrite ^/redirect_me https://github.com permanent;\n    error_page 404 /404.html;\n    location = /404.html {\n        root /var/www/html;\n        internal;\n    }' "$NGINX_CONF"
+sudo sed -i '/server_name _;/a \ \n    rewrite ^/redirect_me https://github.com permanent;\n    error_page 404 /404.html;\n    location = /404.html {\n        root /var/www/html;\n        }' "$NGINX_CONF"
 
 # Test and restart Nginx properly
 sudo nginx -t && sudo service nginx restart
