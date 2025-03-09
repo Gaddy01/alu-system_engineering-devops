@@ -5,15 +5,16 @@
 set -e
 
 # Update and install Nginx
-sudo apt update
-sudo apt install -y nginx
+sudo apt-get update
+sudo apt-get install -y nginx
 
 # Add custom HTTP header in the correct Nginx configuration
 CONFIG_FILE="/etc/nginx/sites-available/default"
 
 # Ensure the directive is inside the 'server' block
-sudo sed -i "/server {/a \\    add_header X-Served-By $(hostname);" "$CONFIG_FILE"
+header_str="server_name _;\\n    add_header X-Served-By $(hostname);"
+sudo sed -i "s|server_name _;|$header_str|" "$CONFIG_FILE"
 
 # Test and reload Nginx
 sudo nginx -t
-sudo systemctl restart nginx
+sudo service nginx restart
