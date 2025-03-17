@@ -1,20 +1,25 @@
 #!/usr/bin/env bash
 # Creation and configuration of the second server
 
-# Exit if any command fails
-set -e
-
-# Update and install Nginx
+# install nginx and allow ufw in port 80
 sudo apt-get update
-sudo apt-get install -y nginx
+sudo apt-get -y install nginx
+sudo ufw allow 'Nginx HTTP'
 
-# Add custom HTTP header in the correct Nginx configuration
-CONFIG_FILE="/etc/nginx/sites-available/default"
+# Make site content folders with permission
+sudo mkdir -p /var/www/html
+sudo chmod -R 755 /var/www
+echo 'Holberton School' |sudo tee  /var/www/html/index.html
 
-# Ensure the directive is inside the 'server' block
-header_str="server_name _;\\n    add_header X-Served-By $(hostname);"
-sudo sed -i "s|server_name _;|$header_str|" "$CONFIG_FILE"
+# Custom error page 404
+echo "Ceci n'est pas une page" |sudo tee /var/www/html/404.html
 
-# Test and reload Nginx
-sudo nginx -t
+# page redirection and custom header
+redirect_config="server_name _;\n\tadd_header X-Served-By \$hostname;\n\trewrite ^\/redirect_me https:\/\/github.com\/El-gibbor permanent;"
+sudo sed -i "s/server_name _;/$redirect_config/" /etc/nginx/sites-enabled/default
+
+# custom 404 error page
+string_for_replacement="listen 80 default_server;\n\terror_page 404 \/404.html;\n\tlocation = \/404.html {\n\t\troot \/var\/www\/html;\n\t\tinternal;\n\t}"
+sudo sed -i "s/listen 80 default_server;/$string_for_replacement/" /etc/nginx/sites-enabled/default
+
 sudo service nginx restart
