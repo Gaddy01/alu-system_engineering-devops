@@ -1,0 +1,27 @@
+#!/usr/bin/env bash
+# Make Nginx is running as the nginx user
+
+# Update the Nginx configuration file to run as the nginx user and listen on port 8080
+NGINX_CONF="/etc/nginx/nginx.conf"
+
+# Make a backup of the original configuration file
+cp "$NGINX_CONF" "${NGINX_CONF}.bak"
+
+# Update user to nginx and listen on port 8080
+sed -i 's/^user .*/user nginx;/g' "$NGINX_CONF"
+sed -i 's/listen .*/listen 8080 default_server;/g' /etc/nginx/sites-available/default
+
+# Ensure that the nginx user exists
+if ! id -u nginx &> /dev/null; then
+    echo "Creating nginx user..."
+    useradd -r -s /sbin/nologin nginx
+fi
+
+# Restart Nginx to apply changes
+nginx -t && systemctl restart nginx
+
+# Verify that Nginx is running as the nginx user
+ps aux | grep '[n]ginx'
+
+# Check if Nginx is listening on port 8080
+nc -z 0 8080 && echo "Nginx is running on port 8080" || echo "Nginx failed to start on port 8080"
