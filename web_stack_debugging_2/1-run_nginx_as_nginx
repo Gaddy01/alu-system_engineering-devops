@@ -21,7 +21,7 @@ fi
 nginx -t && systemctl restart nginx
 
 # Verify that Nginx is running as the nginx user
-pgrep -a nginx
+pgrep -u nginx -a nginx
 
 # Check if Nginx is listening on port 8080
 nc -z 0 8080 && echo "Nginx is running on port 8080" || echo "Nginx failed to start on port 8080"
