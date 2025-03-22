@@ -28,7 +28,7 @@ nginx -t && systemctl restart nginx
 
 # Verify that Nginx is running as the nginx user
 echo "Verifying Nginx user..."
-ps aux | grep 'nginx' | grep -v 'grep'
+pgrep -u nginx -lf nginx
 
 # Check if Nginx is listening on port 8080
 echo "Verifying Nginx port..."
