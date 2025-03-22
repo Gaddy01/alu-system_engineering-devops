@@ -14,8 +14,8 @@ NGINX_CONF="/etc/nginx/nginx.conf"
 sudo cp "$NGINX_CONF" "${NGINX_CONF}.bak"
 
 # Update user to nginx and listen on port 8080
-sudo sed -i 's/^user .*/user nginx;/g' "$NGINX_CONF"
-sudo sed -i 's/listen .*/listen 8080;/g' /etc/nginx/sites-available/default
+sudo sed -i 's/user www-data/user nginx' "$NGINX_CONF"
+sudo sed -i 's/80/8080/g' /etc/nginx/sites-available/default
 
 # Ensure that the nginx user exists
 if ! id -u nginx &> /dev/null; then
@@ -23,13 +23,7 @@ if ! id -u nginx &> /dev/null; then
     sudo useradd -r -s /sbin/nologin nginx
 fi
 
+sudo chmod 644 "$NGINX_CONF"
+
 # Restart Nginx to apply changes
-sudo nginx -t && systemctl restart nginx
-
-# Verify that Nginx is running as the nginx user
-echo "Verifying Nginx user..."
-pgrep -u nginx -lf nginx
-
-# Check if Nginx is listening on port 8080
-echo "Verifying Nginx port..."
-sudo ss -tuln | grep ':8080'
+sudo -u nginx service nginx restart
